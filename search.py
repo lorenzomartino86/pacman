@@ -12,6 +12,7 @@ by Pacman agents (in searchAgents.py).
 """
 
 import util
+import queue
 
 class SearchProblem:
   """
@@ -92,6 +93,26 @@ def breadthFirstSearch(problem):
   [2nd Edition: p 73, 3rd Edition: p 82]
   """
   "*** YOUR CODE HERE ***"
+  state = problem.getStartState()
+  cost = 0
+  node = {'STATE':state, 'COST': cost}
+  
+  return node if problem.isGoalState(state)
+  
+  frontier = queue.Queue()
+  queue.put(node)
+  explored = Set()
+  
+  # loop do
+  assert not frontier.empty(), "failure"
+  
+  #choose the shallowest node in frontier
+  node = frontier.pop()
+  explored.add(node['STATE'])
+  
+  actions = problem.getSuccessors(self, state):
+  
+  
   util.raiseNotDefined()
       
 def uniformCostSearch(problem):
