@@ -12,7 +12,6 @@ by Pacman agents (in searchAgents.py).
 """
 
 import util
-import queue
 
 class SearchProblem:
   """
@@ -87,6 +86,19 @@ def depthFirstSearch(problem):
   "*** YOUR CODE HERE ***"
   util.raiseNotDefined()
 
+class Node():
+    pass
+
+def childNode(problem, parent, action):
+    return {'STATE':problem.result(action), 'PARENT': parent , 'ACTION': action,
+            'PATH-COST': parent.PATH-COST + problem.}
+    problem
+    parent = parent
+    action = action
+    pathCost =
+
+
+
 def breadthFirstSearch(problem):
   """
   Search the shallowest nodes in the search tree first.
@@ -97,24 +109,31 @@ def breadthFirstSearch(problem):
   cost = 0
   node = {'STATE':state, 'COST': cost}
   
-  return node if problem.isGoalState(state)
+  if problem.isGoalState(state):
+      return node
   
-  frontier = queue.Queue()
-  queue.put(node)
-  explored = Set()
+  frontier = util.Queue()
+  frontier.push(node)
+  explored = set()
   
   # loop do
-  assert not frontier.empty(), "failure"
+  assert not frontier.isEmpty(), "failure"
   
   #choose the shallowest node in frontier
   node = frontier.pop()
-  explored.add(node['STATE'])
+  state = node['STATE']
+  explored.add(state)
+
+  print state
+
+  actions = problem.getSuccessors(state)
+
+  for action in actions:
+      print action
+      child = childNode(problem, node, action)
+
   
-  actions = problem.getSuccessors(self, state):
-  
-  
-  util.raiseNotDefined()
-      
+
 def uniformCostSearch(problem):
   "Search the node of least total cost first. "
   "*** YOUR CODE HERE ***"
