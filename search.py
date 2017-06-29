@@ -12,6 +12,7 @@ by Pacman agents (in searchAgents.py).
 """
 
 import util
+from collections import deque
 
 class SearchProblem:
   """
@@ -87,17 +88,28 @@ def depthFirstSearch(problem):
   util.raiseNotDefined()
 
 class Node():
-    pass
-
-def childNode(problem, parent, action):
-    return {'STATE':problem.result(action), 'PARENT': parent , 'ACTION': action,
-            'PATH-COST': parent.PATH-COST + problem.}
-    problem
-    parent = parent
-    action = action
-    pathCost =
+    def __init__(self, state, pathCost, action=None, parent=None):
+        self.action = action
+        self.pathCost = pathCost
+        self.parent = parent
+        self.state = state
 
 
+def childNode(problem, parent, action, stepCost):
+    return Node(state=problem,
+                parent=parent,
+                action=action,
+                pathCost=parent.pathCost + stepCost)
+
+def solution(node):
+    return list(accumulateActions(node, deque()))
+
+def accumulateActions(node, actions):
+    if node.parent is None:
+        return actions
+    else:
+        actions.appendleft(node.action)
+        return accumulateActions(node.parent, actions)
 
 def breadthFirstSearch(problem):
   """
@@ -106,8 +118,8 @@ def breadthFirstSearch(problem):
   """
   "*** YOUR CODE HERE ***"
   state = problem.getStartState()
-  cost = 0
-  node = {'STATE':state, 'COST': cost}
+  pathCost = 0
+  node = Node(state, pathCost)
   
   if problem.isGoalState(state):
       return node
@@ -115,22 +127,23 @@ def breadthFirstSearch(problem):
   frontier = util.Queue()
   frontier.push(node)
   explored = set()
+
+  while True:
+      # loop do
+      assert not frontier.isEmpty(), "failure"
   
-  # loop do
-  assert not frontier.isEmpty(), "failure"
-  
-  #choose the shallowest node in frontier
-  node = frontier.pop()
-  state = node['STATE']
-  explored.add(state)
+      #choose the shallowest node in frontier
+      node = frontier.pop()
+      state = node.state
+      explored.add(state)
 
-  print state
-
-  actions = problem.getSuccessors(state)
-
-  for action in actions:
-      print action
-      child = childNode(problem, node, action)
+      subnodes = problem.getSuccessors(state)
+      for subnode in subnodes:
+          child = childNode(subnode[0], node, subnode[1], subnode[2])
+          if not explored.__contains__(child) or child not in frontier.list:
+              if problem.isGoalState(child.state):
+                  return solution(child)
+              frontier.push(child)
 
   
 

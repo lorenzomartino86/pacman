@@ -585,9 +585,12 @@ def loadAgent(pacman, nographics):
     pythonPathDirs = pythonPathStr.split(';')
   pythonPathDirs.append('.')
 
+
   for moduleDir in pythonPathDirs:
     if not os.path.isdir(moduleDir): continue
     moduleNames = [f for f in os.listdir(moduleDir) if f.endswith('gents.py')]
+
+    print moduleNames
     for modulename in moduleNames:
       try:
         module = __import__(modulename[:-3])
