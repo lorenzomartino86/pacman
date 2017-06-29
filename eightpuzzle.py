@@ -260,8 +260,9 @@ if __name__ == '__main__':
   puzzle = createRandomEightPuzzle(25)
   print('A random puzzle:')
   print(puzzle)
-  
+
   problem = EightPuzzleSearchProblem(puzzle)
+  """
   path = search.breadthFirstSearch(problem)
   print('BFS found a path of %d moves: %s' % (len(path), str(path)))
   curr = puzzle
@@ -271,5 +272,18 @@ if __name__ == '__main__':
     print('After %d move%s: %s' % (i, ("", "s")[i>1], a))
     print(curr)
     
+    raw_input("Press return for the next state...")   # wait for key stroke
+    i += 1
+  """
+
+  path = search.uniformCostSearch(problem)
+  print('BFS found a path of %d moves: %s' % (len(path), str(path)))
+  curr = puzzle
+  i = 1
+  for a in path:
+    curr = curr.result(a)
+    print('After %d move%s: %s' % (i, ("", "s")[i>1], a))
+    print(curr)
+
     raw_input("Press return for the next state...")   # wait for key stroke
     i += 1

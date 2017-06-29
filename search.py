@@ -94,9 +94,16 @@ class Node():
         self.parent = parent
         self.state = state
 
+    def __eq__(self, other):
+        return self.action == other.action and self.pathCost == other.pathCost \
+             and self.parent == other.parent and self.state == other.state
 
-def childNode(problem, parent, action, stepCost):
-    return Node(state=problem,
+    def __hash__(self):
+        return hash(self.parent)
+
+
+def aNode(state, parent, action, stepCost):
+    return Node(state=state,
                 parent=parent,
                 action=action,
                 pathCost=parent.pathCost + stepCost)
@@ -116,20 +123,18 @@ def breadthFirstSearch(problem):
   Search the shallowest nodes in the search tree first.
   [2nd Edition: p 73, 3rd Edition: p 82]
   """
-  "*** YOUR CODE HERE ***"
   state = problem.getStartState()
   pathCost = 0
   node = Node(state, pathCost)
   
   if problem.isGoalState(state):
-      return node
+      return solution(node)
   
   frontier = util.Queue()
   frontier.push(node)
   explored = set()
 
   while True:
-      # loop do
       assert not frontier.isEmpty(), "failure"
   
       #choose the shallowest node in frontier
@@ -139,18 +144,50 @@ def breadthFirstSearch(problem):
 
       subnodes = problem.getSuccessors(state)
       for subnode in subnodes:
-          child = childNode(subnode[0], node, subnode[1], subnode[2])
+          (state, action, stepCost) = subnode
+          child = aNode(state, node, action, stepCost)
           if not explored.__contains__(child) or child not in frontier.list:
               if problem.isGoalState(child.state):
                   return solution(child)
               frontier.push(child)
 
-  
-
 def uniformCostSearch(problem):
   "Search the node of least total cost first. "
-  "*** YOUR CODE HERE ***"
-  util.raiseNotDefined()
+  state = problem.getStartState()
+  pathCost = 0
+  node = Node(state, pathCost)
+
+  # a priority queue ordered by PATH-COST, with node as the only element
+  frontier = util.PriorityQueueWithFunction(lambda node: node.pathCost)
+  frontier.push(node)
+  explored = set()
+
+  iter = 0
+  while True:
+      assert not frontier.isEmpty(), "failure"
+      # select the lowest cost node in frontier
+      node = frontier.pop()
+      if problem.isGoalState(node.state):
+          return solution(node)
+      explored.add(node)
+      subnodes = problem.getSuccessors(state)
+      for subnode in subnodes:
+          (state, action, stepCost) = subnode
+          child = aNode(state, node, action, stepCost)
+          frontierStates = [states[1] for states in frontier.heap]
+          higherPathCostNode = frontier.heap[len(frontier.heap)-1] if len(frontier.heap) > 0 else None
+
+          if child not in explored or child not in frontierStates:
+              frontier.push(child)
+          elif child in frontierStates and child.pathCost > node.pathCost:
+
+      print frontier.heap[0]
+      print frontier.heap
+
+      iter += 1
+      if iter > 3 :
+          exit()
+
 
 def nullHeuristic(state, problem=None):
   """
