@@ -101,6 +101,9 @@ class Node():
     def __hash__(self):
         return hash(self.parent)
 
+    def __str__(self):
+        return "Node{parent: " + self.parent + ", action: " + self.action + ", state: " + self.state + ", action: " + self.action + "}"
+
 
 def aNode(state, parent, action, stepCost):
     return Node(state=state,
@@ -142,50 +145,48 @@ def breadthFirstSearch(problem):
       state = node.state
       explored.add(state)
 
-      subnodes = problem.getSuccessors(state)
-      for subnode in subnodes:
-          (state, action, stepCost) = subnode
+      successors = problem.getSuccessors(state)
+      for (state, action, stepCost) in successors:
           child = aNode(state, node, action, stepCost)
-          if not explored.__contains__(child) or child not in frontier.list:
+          if child not in explored or child not in frontier.list:
               if problem.isGoalState(child.state):
                   return solution(child)
               frontier.push(child)
 
 def uniformCostSearch(problem):
-  "Search the node of least total cost first. "
+  "Search the frontierNode of least total cost first. "
   state = problem.getStartState()
   pathCost = 0
-  node = Node(state, pathCost)
+  frontierNode = Node(state, pathCost)
 
-  # a priority queue ordered by PATH-COST, with node as the only element
+  # a priority queue ordered by PATH-COST, with frontierNode as the only element
   frontier = util.PriorityQueueWithFunction(lambda node: node.pathCost)
-  frontier.push(node)
+  frontier.push(frontierNode)
   explored = set()
 
   iter = 0
   while True:
       assert not frontier.isEmpty(), "failure"
-      # select the lowest cost node in frontier
-      node = frontier.pop()
-      if problem.isGoalState(node.state):
-          return solution(node)
-      explored.add(node)
-      subnodes = problem.getSuccessors(state)
-      for subnode in subnodes:
-          (state, action, stepCost) = subnode
-          child = aNode(state, node, action, stepCost)
-          frontierStates = [states[1] for states in frontier.heap]
+      # select the lowest cost frontierNode in frontier
+      frontierNode = frontier.pop()
+      if problem.isGoalState(frontierNode.state):
+          return solution(frontierNode)
+      explored.add(frontierNode)
+      successors = problem.getSuccessors(state)
+      for (state, action, stepCost) in successors:
+          child = aNode(state, frontierNode, action, stepCost)
+          frontierList = [states[1] for states in frontier.heap]
           higherPathCostNode = frontier.heap[len(frontier.heap)-1] if len(frontier.heap) > 0 else None
 
-          if child not in explored or child not in frontierStates:
+          if child not in explored or child not in frontierList:
               frontier.push(child)
-          elif child in frontierStates and child.pathCost > node.pathCost:
-
-      print frontier.heap[0]
-      print frontier.heap
+          elif child in frontierList and child.pathCost > frontierNode.pathCost:
+              print frontier.heap
+              pass
 
       iter += 1
-      if iter > 3 :
+      if iter > 5 :
+          print frontier.heap
           exit()
 
 
