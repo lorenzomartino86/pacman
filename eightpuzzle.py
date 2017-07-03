@@ -10,6 +10,8 @@ import search
 import random
 
 # Module Classes
+from searchAgents import manhattanHeuristic
+
 
 class EightPuzzleState:
  """
@@ -278,6 +280,18 @@ if __name__ == '__main__':
 
   path = search.uniformCostSearch(problem)
   print('UCS found a path of %d moves: %s' % (len(path), str(path)))
+  curr = puzzle
+  i = 1
+  for a in path:
+    curr = curr.result(a)
+    print('After %d move%s: %s' % (i, ("", "s")[i>1], a))
+    print(curr)
+
+    raw_input("Press return for the next state...")   # wait for key stroke
+    i += 1
+
+  path = search.aStarSearch(problem)
+  print('A* found a path of %d moves: %s' % (len(path), str(path)))
   curr = puzzle
   i = 1
   for a in path:
