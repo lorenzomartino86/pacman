@@ -164,7 +164,6 @@ def uniformCostSearch(problem):
   frontier.push(frontierNode)
   explored = set()
 
-  iter = 0
   while True:
       assert not frontier.isEmpty(), "failure"
       # select the lowest cost frontierNode in frontier
@@ -176,18 +175,9 @@ def uniformCostSearch(problem):
       for (state, action, stepCost) in successors:
           child = aNode(state, frontierNode, action, stepCost)
           frontierList = [states[1] for states in frontier.heap]
-          higherPathCostNode = frontier.heap[len(frontier.heap)-1] if len(frontier.heap) > 0 else None
 
-          if child not in explored or child not in frontierList:
+          if child not in explored:
               frontier.push(child)
-          elif child in frontierList and child.pathCost > frontierNode.pathCost:
-              print frontier.heap
-              pass
-
-      iter += 1
-      if iter > 5 :
-          print frontier.heap
-          exit()
 
 
 def nullHeuristic(state, problem=None):
