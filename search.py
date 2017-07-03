@@ -162,22 +162,27 @@ def uniformCostSearch(problem):
   # a priority queue ordered by PATH-COST, with frontierNode as the only element
   frontier = util.PriorityQueueWithFunction(lambda node: node.pathCost)
   frontier.push(frontierNode)
-  explored = set()
+  explored = list()
 
-  while True:
+  i = 0
+  while not frontier.isEmpty():
       assert not frontier.isEmpty(), "failure"
       # select the lowest cost frontierNode in frontier
       frontierNode = frontier.pop()
-      if problem.isGoalState(frontierNode.state):
+      state = frontierNode.state
+
+      if problem.isGoalState(state):
           return solution(frontierNode)
-      explored.add(frontierNode)
+
+      explored.append(state)
+
       successors = problem.getSuccessors(state)
       for (state, action, stepCost) in successors:
           child = aNode(state, frontierNode, action, stepCost)
-          frontierList = [states[1] for states in frontier.heap]
 
-          if child not in explored:
+          if state not in explored:
               frontier.push(child)
+  return None
 
 
 def nullHeuristic(state, problem=None):

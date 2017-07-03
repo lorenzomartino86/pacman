@@ -262,7 +262,7 @@ if __name__ == '__main__':
   print(puzzle)
 
   problem = EightPuzzleSearchProblem(puzzle)
-  """
+
   path = search.breadthFirstSearch(problem)
   print('BFS found a path of %d moves: %s' % (len(path), str(path)))
   curr = puzzle
@@ -274,10 +274,10 @@ if __name__ == '__main__':
     
     raw_input("Press return for the next state...")   # wait for key stroke
     i += 1
-  """
+
 
   path = search.uniformCostSearch(problem)
-  print('BFS found a path of %d moves: %s' % (len(path), str(path)))
+  print('UCS found a path of %d moves: %s' % (len(path), str(path)))
   curr = puzzle
   i = 1
   for a in path:
